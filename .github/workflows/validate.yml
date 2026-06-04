@@ -1,0 +1,75 @@
+name: validate
+
+on:
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: "Profile 文件路径"
+        required: false
+        default: "./profiles/deepseek.json"
+      tool_count:
+        description: "工具数量"
+        required: false
+        default: "8"
+      interval_ms:
+        description: "控制组请求间隔（毫秒）"
+        required: false
+        default: "5000"
+      target_topic:
+        description: "目标主题"
+        required: false
+        default: "project orbit delayed orders"
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "23 3 * * *"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Run validator
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          PROFILE="${{ inputs.profile || './profiles/deepseek.json' }}"
+          TOOL_COUNT="${{ inputs.tool_count || '8' }}"
+          INTERVAL_MS="${{ inputs.interval_ms || '5000' }}"
+          TARGET_TOPIC="${{ inputs.target_topic || 'project orbit delayed orders' }}"
+
+          node validate_defer_loading.mjs \
+            --profile "$PROFILE" \
+            --tool-count "$TOOL_COUNT" \
+            --interval-ms "$INTERVAL_MS" \
+            --target-topic "$TARGET_TOPIC" \
+            --output ./validation.last.json \
+            --summary-md ./validation.summary.md
+
+      - name: Append job summary
+        run: cat validation.summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-results
+          path: |
+            validation.last.json
+            validation.summary.md

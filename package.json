@@ -1,0 +1,8 @@
+{
+  "name": "anthropic-defer-loading-validator",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test *.test.mjs"
+  }
+}

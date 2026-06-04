@@ -1,0 +1,21 @@
+{
+  "id": "deepseek",
+  "label": "DeepSeek 官方 Anthropic 接口",
+  "endpoint": "https://api.deepseek.com/anthropic/v1/messages",
+  "model": "deepseek-v4-flash",
+  "auth": {
+    "type": "x-api-key",
+    "env": "DEEPSEEK_API_KEY"
+  },
+  "default_headers": {
+    "anthropic-version": "2023-06-01"
+  },
+  "provider": null,
+  "top_level_cache_control": false,
+  "defer_search_probe": {
+    "enabled": true,
+    "tool_search_type": "tool_search_tool_regex_20251119",
+    "tool_search_name": "tool_search_tool_regex",
+    "beta_header": "advanced-tool-use-2025-11-20"
+  }
+}
