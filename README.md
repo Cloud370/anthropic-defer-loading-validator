@@ -2,6 +2,8 @@
 
 [![验证工作流](https://github.com/Cloud370/anthropic-defer-loading-validator/actions/workflows/validate.yml/badge.svg)](https://github.com/Cloud370/anthropic-defer-loading-validator/actions/workflows/validate.yml)
 
+- 示例成功运行：`https://github.com/Cloud370/anthropic-defer-loading-validator/actions/runs/26925985310`
+
 这是一个**公开、可复现、以结论为导向**的 Node.js 验证器，用来检查某个 Anthropic-compatible 接口是否真的实现了 `defer_loading` 保护 prompt cache 的语义，而不只是“字段能过”。
 
 当前默认 profile 是：**DeepSeek 官方 Anthropic 接口**。
